@@ -46,6 +46,11 @@ menu = st.sidebar.radio(
 
 #  Home
 if menu == "Home":
+    st.image("images/red-wine.jpg", use_container_width=True)
+    st.write("""
+        Welcome to the Wine Quality Prediction App!  
+        This application predicts whether a wine is **Good** or **Bad** based on its chemical properties.
+    """)
     st.subheader(" Project Overview")
     st.write("""
     This application uses the **Wine Quality Dataset** to predict whether a wine is good or bad
@@ -93,18 +98,18 @@ elif menu == "Visualizations":
     st.subheader(" Visualizations")
 
     # Distribution of Good vs Bad wines
-    st.markdown("### 1 Distribution of Good vs Bad Wines")
+    st.markdown("### 1. Distribution of Good vs Bad Wines")
     fig1 = px.histogram(df, x="good", color="good", title="Good (1) vs Bad (0) Wine Distribution")
     st.plotly_chart(fig1, use_container_width=True)
 
     # Alcohol content vs Wine Quality
-    st.markdown("### 2 Alcohol Content vs Wine Quality")
+    st.markdown("### 2. Alcohol Content vs Wine Quality")
     fig2 = px.box(df, x="good", y="alcohol", color="good", points="all",
                   title="Alcohol Content by Wine Quality")
     st.plotly_chart(fig2, use_container_width=True)
 
     # Correlation heatmap
-    st.markdown("### 3 Correlation Heatmap")
+    st.markdown("### 3. Correlation Heatmap")
     corr_matrix = df.corr()
     fig3 = px.imshow(corr_matrix, text_auto=True, aspect="auto",
                      title="Feature Correlation Heatmap",
@@ -112,12 +117,12 @@ elif menu == "Visualizations":
     st.plotly_chart(fig3, use_container_width=True)
 
     # Alcohol vs Volatile Acidity scatter plot
-    st.markdown("### 4 Alcohol vs Volatile Acidity (Colored by Quality)")
+    st.markdown("### 4. Alcohol vs Volatile Acidity (Colored by Quality)")
     fig4 = px.scatter(df, x="alcohol", y="volatile acidity", color=df["good"].astype(str),
                       title="Alcohol vs Volatile Acidity")
     st.plotly_chart(fig4, use_container_width=True)
 
-#  Prediction Page
+# Prediction Page
 elif menu == "Prediction":
     st.subheader(" Predict Wine Quality (Good or Bad)")
 
@@ -137,11 +142,17 @@ elif menu == "Prediction":
     alcohol = st.number_input("Alcohol", min_value=8.0, max_value=15.0, value=10.0, step=0.1)
 
     if st.button("Predict Quality"):
-        # Prepare input data with correct columns (without 'quality' and 'good')
+        # Drop quality, good, and Id if present
         X = df.drop(['quality', 'good'], axis=1)
-        input_data = pd.DataFrame([[fixed_acidity, volatile_acidity, citric_acid, residual_sugar,
-                                    chlorides, free_sulfur_dioxide, total_sulfur_dioxide,
-                                    density, pH, sulphates, alcohol]], columns=X.columns)
+        if 'Id' in X.columns:
+            X = X.drop(['Id'], axis=1)
+
+        # Prepare input data with matching columns
+        input_data = pd.DataFrame([[
+            fixed_acidity, volatile_acidity, citric_acid, residual_sugar,
+            chlorides, free_sulfur_dioxide, total_sulfur_dioxide,
+            density, pH, sulphates, alcohol
+        ]], columns=X.columns)
 
         # Scale the input
         input_scaled = scaler.transform(input_data)
@@ -164,6 +175,10 @@ elif menu == "Model Performance":
     X_perf = df.drop(['quality', 'good'], axis=1)
     y_perf = df['good']
 
+    # Drop 'Id' if it exists (important for retrained model)
+    if 'Id' in X_perf.columns:
+        X_perf = X_perf.drop('Id', axis=1)
+
     # Scale features
     X_scaled_perf = scaler.transform(X_perf)
 
@@ -179,14 +194,17 @@ elif menu == "Model Performance":
     cm = confusion_matrix(y_perf, y_pred_perf)
     st.markdown("**Confusion Matrix:**")
     fig, ax = plt.subplots()
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Bad', 'Good'], yticklabels=['Bad', 'Good'], ax=ax)
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['Bad', 'Good'], yticklabels=['Bad', 'Good'], ax=ax)
     plt.ylabel("Actual")
     plt.xlabel("Predicted")
     st.pyplot(fig)
 
     # Classification Report
     st.markdown("**Classification Report:**")
-    report_df = pd.DataFrame(classification_report(y_perf, y_pred_perf, output_dict=True)).transpose()
+    report_df = pd.DataFrame(
+        classification_report(y_perf, y_pred_perf, output_dict=True)
+    ).transpose()
     st.dataframe(report_df)
 
     # ROC Curve
@@ -207,34 +225,42 @@ elif menu == "Model Performance":
 #  About Page
 elif menu == "About":
     st.subheader(" About This Project")
-    st.write("""
-    This project was developed as part of a Machine Learning Model Deployment assignment.
 
-    **Objective:**
-    - Predict whether a wine is **Good** or **Bad** based on its chemical properties.
+    # Create two columns: left for image, right for text
+    col1, col2 = st.columns([1, 2])  # Adjust ratio as needed
 
-    **Dataset:**
-    - Wine Quality Dataset (provided as `WineQT.csv`).
-    - Original dataset source: [Wine Quality Dataset](https://www.kaggle.com/datasets/yasserh/wine-quality-dataset/data).
+    with col1:
+         st.write("""
+        This project was developed as part of a Machine Learning Model Deployment assignment.
 
-    **Workflow:**
-    1. Data Exploration & Preprocessing
-    2. Feature Scaling
-    3. Model Training (Random Forest & Logistic Regression)
-    4. Model Evaluation & Selection
-    5. Model Saving with `joblib`
-    6. Building this Streamlit web application
-    7. Deployment to Streamlit Cloud
+        **Objective:**
+        - Predict whether a wine is **Good** or **Bad** based on its chemical properties.
 
-    **Technologies Used:**
-    - Python
-    - Pandas, NumPy, Seaborn, Matplotlib, Plotly
-    - Scikit-learn
-    - Streamlit
-    - Joblib
+        **Dataset:**
+        - Wine Quality Dataset (provided as `WineQT.csv`).
+        - Original dataset source: [Wine Quality Dataset](https://www.kaggle.com/datasets/yasserh/wine-quality-dataset/data).
 
-    **Author:**
-    - Kestroy Stephan
-    """)
+        **Workflow:**
+        1. Data Exploration & Preprocessing
+        2. Feature Scaling
+        3. Model Training (Random Forest & Logistic Regression)
+        4. Model Evaluation & Selection
+        5. Model Saving with `joblib`
+        6. Building this Streamlit web application
+        7. Deployment to Streamlit Cloud
+
+        **Technologies Used:**
+        - Python
+        - Pandas, NumPy, Seaborn, Matplotlib, Plotly
+        - Scikit-learn
+        - Streamlit
+        - Joblib
+
+        **Author:**
+        - Kestroy Stephan
+        """)
+
+    with col2:
+        st.image("images/about-wine.jpg", use_container_width=True)
 
 st.sidebar.info("Machine Learning Model Deployment with Streamlit")
