@@ -46,7 +46,7 @@ menu = st.sidebar.radio(
 
 #  Home
 if menu == "Home":
-    st.image("images/red-wine.jpg", use_container_width=True)
+    st.image("Images/red-wine.jpg", use_container_width=True)
     st.write("""
         Welcome to the Wine Quality Prediction App!  
         This application predicts whether a wine is **Good** or **Bad** based on its chemical properties.
@@ -261,6 +261,6 @@ elif menu == "About":
         """)
 
     with col2:
-        st.image("images/about-wine.jpg", use_container_width=True)
+        st.image("Images/about-wine.jpg", use_container_width=True)
 
 st.sidebar.info("Machine Learning Model Deployment with Streamlit")
