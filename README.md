@@ -3,7 +3,6 @@
 An interactive **Machine Learning Web Application** that predicts whether a wine is **Good** or **Bad** based on its chemical properties.  
 Built with **Streamlit**, trained using the **Wine Quality Dataset**, and deployed on **Streamlit Cloud**.
 
----
 
 ## 📌 Project Overview
 This project demonstrates the complete **Machine Learning Deployment Pipeline**:
@@ -21,7 +20,7 @@ The model classifies wines into:
 
 ## 📂 Dataset
 - **Name:** Wine Quality Dataset (`WineQT.csv`)  
-- **Source:** [UCI Machine Learning Repository](https://www.kaggle.com/datasets/yasserh/wine-quality-dataset/data)  
+- **Source:** [Wine Quality Dataset](https://www.kaggle.com/datasets/yasserh/wine-quality-dataset/data)  
 - **Description:** Contains physicochemical properties (acidity, sugar, pH, etc.) and quality ratings for red wine samples.  
 
 **Features include:**
@@ -40,37 +39,16 @@ The model classifies wines into:
 **Target variable:**
 - `quality` → converted into binary `good` (1) and `bad` (0) for classification.
 
----
-
-## 📁 Project Structure
-Wine-Quality-Prediction/
-├── app.py # Streamlit application
-├── model.pkl # Trained ML model
-├── scaler.pkl # Feature scaler
-├── data/
-│ └── WineQT.csv # Dataset
-├── notebooks/
-│ └── wine_model_training.ipynb # EDA, preprocessing, model training
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
-
-yaml
 
 ## ⚙️ Installation & Usage
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/<your-username>/wine-quality-prediction.git
+git clone https://github.com/KestroyStephan/wine-quality-prediction.git
 cd wine-quality-prediction
 2️⃣ Install dependencies
-bash
-Copy
-Edit
 pip install -r requirements.txt
 3️⃣ Run the application locally
-bash
-Copy
-Edit
 streamlit run app.py
 Open your browser and go to: http://localhost:8501
 
