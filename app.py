@@ -39,7 +39,7 @@ st.title(" Wine Quality Prediction App")
 st.write("This app predicts whether a wine is **Good** or **Bad** based on its chemical properties.")
 
 # Sidebar menu
-menu = st.sidebar.radio(
+menu = st.sidebar.selectbox(
     "Navigation",
     ["Home", "Data Exploration", "Visualizations", "Prediction", "Model Performance", "About"]
 )
